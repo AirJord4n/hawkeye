@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Hawkeyes LoL-Accounts</title>
-<meta name="description" content="Ränge, letzte Matches und Champion-Mastery aller LoL-Accounts von Hawkeye.">
+<meta name="description" content="Ranks, recent matches and champion mastery for all of Hawkeye's LoL accounts.">
 <meta property="og:title" content="Hawkeyes LoL-Accounts">
-<meta property="og:description" content="Ränge, letzte Matches und Champion-Mastery – automatisch aktualisiert.">
+<meta property="og:description" content="Ranks, recent matches and champion mastery – updated automatically.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0a1428">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,36 +89,36 @@ footer{border-top:1px solid var(--line);color:var(--mut);font-size:13px}footer p
 <body>
 <header class="band head"><div class="wrap">
   <h1 id="title">Hawkeyes LoL-Accounts</h1>
-  <p id="upd">Lade Daten …</p>
+  <p id="upd">Loading data…</p>
   <div class="stats" id="stats"></div>
 </div></header>
 
 <main class="band"><div class="wrap">
   <h2>Accounts</h2>
-  <div class="grid" id="accs"><div class="empty">Lade Accounts …</div></div>
+  <div class="grid" id="accs"><div class="empty">Loading accounts…</div></div>
 
-  <h2 style="margin-top:48px">Champion-Mastery</h2>
+  <h2 style="margin-top:48px">Champion Mastery</h2>
   <div class="filters">
-    <label>Champion suchen<input id="mq" type="search" placeholder="z. B. Ahri"></label>
-    <label>Account<select id="msel"><option value="all">Alle Accounts zusammen</option></select></label>
-    <label>Sortierung<select id="msort">
-      <option value="pts">Mastery-Punkte</option><option value="lv">Mastery-Level</option>
-      <option value="last">Zuletzt gespielt</option><option value="n">Name</option></select></label>
+    <label>Search champion<input id="mq" type="search" placeholder="e.g. Ahri"></label>
+    <label>Account<select id="msel"><option value="all">All accounts combined</option></select></label>
+    <label>Sort by<select id="msort">
+      <option value="pts">Mastery points</option><option value="lv">Mastery level</option>
+      <option value="last">Last played</option><option value="n">Name</option></select></label>
   </div>
   <div class="mstats" id="mstats"></div>
   <div id="mtab"></div>
-  <div class="more"><button id="bMore" hidden>Alle anzeigen</button></div>
+  <div class="more"><button id="bMore" hidden>Show all</button></div>
 </div></main>
 
 <footer class="band"><div class="wrap">
-  <p>Daten über die offizielle Riot Games API, automatisch aktualisiert.</p>
+  <p>Data from the official Riot Games API, updated automatically.</p>
   <p>This site isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
 </div></footer>
 
 <script>
 {
 const TIERS=['IRON','BRONZE','SILVER','GOLD','PLATINUM','EMERALD','DIAMOND','MASTER','GRANDMASTER','CHALLENGER'];
-const TDE={IRON:'Eisen',BRONZE:'Bronze',SILVER:'Silber',GOLD:'Gold',PLATINUM:'Platin',EMERALD:'Smaragd',DIAMOND:'Diamant',MASTER:'Meister',GRANDMASTER:'Großmeister',CHALLENGER:'Herausforderer'};
+const TDE={IRON:'Iron',BRONZE:'Bronze',SILVER:'Silver',GOLD:'Gold',PLATINUM:'Platinum',EMERALD:'Emerald',DIAMOND:'Diamond',MASTER:'Master',GRANDMASTER:'Grandmaster',CHALLENGER:'Challenger'};
 const TCOL={IRON:'#6b5d55',BRONZE:'#9c5f3a',SILVER:'#7f8d99',GOLD:'#b8892f',PLATINUM:'#2f9a93',EMERALD:'#1f9e62',DIAMOND:'#4f7fe0',MASTER:'#9a55cc',GRANDMASTER:'#c9413a',CHALLENGER:'#d9a92e'};
 const DIVS=['IV','III','II','I'];
 const REG={euw:'euw1',eune:'eun1',na:'na1',kr:'kr',br:'br1',lan:'la1',las:'la2',oce:'oc1',tr:'tr1',ru:'ru',jp:'jp1',me:'me1',sg:'sg2',tw:'tw2',vn:'vn2'};
@@ -126,14 +126,14 @@ const QN={420:'Solo/Duo',440:'Flex',450:'ARAM',400:'Normal (Draft)',430:'Normal 
 const DD='https://ddragon.leagueoflegends.com/cdn/';
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=n=>Number(n||0).toLocaleString('de-DE');
+const fmt=n=>Number(n||0).toLocaleString('en-US');
 const hue=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))%360;return h};
 const ini=s=>String(s).replace(/[^A-Za-zÀ-ÿ ]/g,'').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?';
 const safe=c=>/^[A-Za-z0-9]+$/.test(c||'')?c:'';
 const day=864e5;
-const ago=t=>{if(!t)return '–';const m=Math.floor((Date.now()-t)/6e4);if(m<60)return `vor ${Math.max(m,1)} Min.`;const h=Math.floor(m/60);if(h<24)return `vor ${h} Std.`;const d=Math.floor(h/24);return d<2?'gestern':d<60?`vor ${d} Tagen`:d<730?`vor ${Math.round(d/30)} Monaten`:`vor ${Math.round(d/365)} Jahren`};
+const ago=t=>{if(!t)return '–';const m=Math.floor((Date.now()-t)/6e4);if(m<60)return `${Math.max(m,1)} min ago`;const h=Math.floor(m/60);if(h<24)return `${h} h ago`;const d=Math.floor(h/24);return d<2?'yesterday':d<60?`${d} days ago`:d<730?`${Math.round(d/30)} months ago`:`${Math.round(d/365)} years ago`};
 const isMP=t=>['MASTER','GRANDMASTER','CHALLENGER'].includes(t);
-const rankTxt=r=>r?`${TDE[r.tier]||r.tier}${isMP(r.tier)?'':' '+(r.div||'')}`:'Ungewertet';
+const rankTxt=r=>r?`${TDE[r.tier]||r.tier}${isMP(r.tier)?'':' '+(r.div||'')}`:'Unranked';
 const rankScore=r=>r&&TIERS.includes(r.tier)?TIERS.indexOf(r.tier)*1000+(isMP(r.tier)?0:Math.max(DIVS.indexOf(r.div),0)*100)+(+r.lp||0):-1;
 const best=a=>[a.solo,a.flex].filter(Boolean).sort((x,y)=>rankScore(y)-rankScore(x))[0]||null;
 const split=id=>{const i=String(id).lastIndexOf('#');return i<0?[id,'']:[id.slice(0,i),id.slice(i+1)]};
@@ -143,12 +143,12 @@ let D={accounts:[]},ver='',mlimit=25;
 const cicon=(m,cls='ci')=>`<span class="${cls}" style="--h:${hue(m.n)}" aria-hidden="true">${esc(ini(m.n))}${safe(m.c)&&ver?`<img src="${DD}${ver}/img/champion/${safe(m.c)}.png" alt="" loading="lazy" onerror="this.remove()">`:''}</span>`;
 const CREST='https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/';
 const emb=r=>{const t=r&&TIERS.includes(r.tier)?r.tier.toLowerCase():'unranked';return `<div class="em" style="--c:${r?TCOL[r.tier]||'#556':'#2a3a52'}" title="${esc(rankTxt(r))}"><img src="${CREST}${t}.svg" alt="${esc(rankTxt(r))}" onerror="this.outerHTML='<span class=fb></span>'">${r&&!isMP(r.tier)&&r.div?`<b>${esc(r.div)}</b>`:''}</div>`};
-const rk=r=>r?`<b>${esc(rankTxt(r))}</b> · ${fmt(r.lp)} LP`:'<b>Ungewertet</b>';
+const rk=r=>r?`<b>${esc(rankTxt(r))}</b> · ${fmt(r.lp)} LP`:'<b>Unranked</b>';
 
 function links(a){
   const [n,t]=split(a.riotId),r=a.region||'euw',p=REG[r]||'euw1',slug=encodeURIComponent(n+'-'+t);
   return [['op.gg',`https://op.gg/lol/summoners/${r}/${slug}`],['u.gg',`https://u.gg/lol/profile/${p}/${encodeURIComponent((n+'-'+t).toLowerCase())}/overview`],
-    ['League of Graphs',`https://www.leagueofgraphs.com/summoner/${r}/${slug}`],['Live-Spiel',`https://porofessor.gg/live/${r}/${slug}`]]
+    ['League of Graphs',`https://www.leagueofgraphs.com/summoner/${r}/${slug}`],['Live game',`https://porofessor.gg/live/${r}/${slug}`]]
     .map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join('');
 }
 function renderStats(list){
@@ -156,10 +156,10 @@ function renderStats(list){
   const top=list.map(a=>({a,r:best(a)})).filter(x=>x.r).sort((x,y)=>rankScore(y.r)-rankScore(x.r))[0];
   let w=0,l=0;for(const a of list)for(const r of [a.solo,a.flex])if(r){w+=+r.w||0;l+=+r.l||0}
   const lv=list.reduce((s,a)=>s+(+a.level||0),0);
-  const st=[['Accounts',list.length,lv?'Level gesamt '+fmt(lv):''],
-    ['Bester Rang (aktuell)',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP · '+(top.r===top.a.solo?'Solo/Duo':'Flex'):'',top&&top.r.tier],
-    ['Siegquote gesamt',w+l?Math.round(w/(w+l)*100)+' %':'–',w+l?fmt(w+l)+' Ranked-Spiele':''],
-    ['Mastery-Punkte',fmt(tot),all[0]?'Top-Mastery: '+all[0].n:'']];
+  const st=[['Accounts',list.length,lv?'Total level '+fmt(lv):''],
+    ['Best rank (current)',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP · '+(top.r===top.a.solo?'Solo/Duo':'Flex'):'',top&&top.r.tier],
+    ['Overall win rate',w+l?Math.round(w/(w+l)*100)+'%':'–',w+l?fmt(w+l)+' ranked games':''],
+    ['Mastery points',fmt(tot),all[0]?'Top mastery: '+all[0].n:'']];
   $('#stats').innerHTML=st.map(([l,v,s,tier])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<img src="${CREST}${tier.toLowerCase()}.svg" alt="" onerror="this.remove()">`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
 }
 function card(a){
@@ -171,16 +171,16 @@ function card(a){
   const rec=(a.recent||[]).slice(0,5);
   const icon=Number.isInteger(a.icon)&&ver?`<span class="pi"><img src="${DD}${ver}/img/profileicon/${a.icon}.png" alt="" loading="lazy" onerror="this.remove()"></span>`:'';
   return `<article class="acc">
-    <div class="ban" style="--h:${hue(hero?hero.n:n)};--t:${cur?TCOL[cur.tier]:'var(--gold)'};${splash}">${st?`<span class="tc" title="Meistgespielter Champion seit Saisonstart${a.seasonDone===false?' (Zählung läuft noch)':''}">Season: ${esc(st.n)} · ${fmt(st.games)} Spiele${a.seasonDone===false?' …':''}</span>`:hero?`<span class="tc">Top-Mastery: ${esc(hero.n)}</span>`:''}${emb(cur)}${icon}</div>
+    <div class="ban" style="--h:${hue(hero?hero.n:n)};--t:${cur?TCOL[cur.tier]:'var(--gold)'};${splash}">${st?`<span class="tc" title="Most played champion this season${a.seasonDone===false?' (still counting)':''}">Most played: ${esc(st.n)} · ${fmt(st.games)} games${a.seasonDone===false?' …':''}</span>`:hero?`<span class="tc">Top mastery: ${esc(hero.n)}</span>`:''}${emb(cur)}${icon}</div>
     <div class="in">
       <div><h3>${esc(n)}<span>#${esc(t)}</span></h3><p class="meta">${a.level?'Level '+fmt(a.level):'Level –'}${a.note?' · '+esc(a.note):''}</p></div>
-      <div class="cmp"><div><small>Aktuell · ${curL}</small>${rk(cur)}</div><div><small>Allzeit-Bestleistung</small>${rk(peak)}</div></div>
-      ${g?`<div><div class="perf"><div><b>${wr} %</b><small>Siegquote</small></div><div><b>${fmt(cur.w)}</b><small>Siege</small></div><div><b>${fmt(cur.l)}</b><small>Niederl.</small></div><div><b>${fmt(g)}</b><small>Spiele</small></div></div><div class="wr"><i style="width:${wr}%"></i></div></div>`:''}
-      ${a.solo&&a.flex?`<p class="meta" style="margin:0">Flex: ${esc(rankTxt(a.flex))} · ${fmt(a.flex.lp)} LP · ${fmt(a.flex.w)} S / ${fmt(a.flex.l)} N</p>`:''}
-      <div><span class="lab">Letzte 5 Matches</span>${rec.length?`<div class="rec">${rec.map(m=>`<div class="mt ${m.win?'w':'l'}" title="${esc(m.n)} · ${m.win?'Sieg':'Niederlage'}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}">${cicon(m)}<div>${+m.k||0}/${+m.d||0}/${+m.a||0}</div></div>`).join('')}</div>`:'<p class="note" style="margin:4px 0 0">Keine aktuellen Matches</p>'}</div>
-      ${top.length?`<div><span class="lab">Top-Mastery</span><div class="chips">${top.slice(0,3).map(m=>`<span class="chip">${cicon(m)}${esc(m.n)} · ${fmt(m.pts)}</span>`).join('')}</div></div>`:''}
-      <a class="go" href="https://dpm.lol/${esc(encodeURIComponent(n+'-'+t))}" target="_blank" rel="noopener">Statistiken &amp; Analysen ansehen</a>
-      <nav class="links">${links(a)}<button type="button" data-copy="${esc(a.riotId)}">Riot-ID kopieren</button></nav></div></article>`;
+      <div class="cmp"><div><small>Current · ${curL}</small>${rk(cur)}</div><div><small>All-time peak</small>${rk(peak)}</div></div>
+      ${g?`<div><div class="perf"><div><b>${wr}%</b><small>Win rate</small></div><div><b>${fmt(cur.w)}</b><small>Wins</small></div><div><b>${fmt(cur.l)}</b><small>Losses</small></div><div><b>${fmt(g)}</b><small>Games</small></div></div><div class="wr"><i style="width:${wr}%"></i></div></div>`:''}
+      ${a.solo&&a.flex?`<p class="meta" style="margin:0">Flex: ${esc(rankTxt(a.flex))} · ${fmt(a.flex.lp)} LP · ${fmt(a.flex.w)}W / ${fmt(a.flex.l)}L</p>`:''}
+      <div><span class="lab">Last 5 matches</span>${rec.length?`<div class="rec">${rec.map(m=>`<div class="mt ${m.win?'w':'l'}" title="${esc(m.n)} · ${m.win?'Win':'Loss'}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}">${cicon(m)}<div>${+m.k||0}/${+m.d||0}/${+m.a||0}</div></div>`).join('')}</div>`:'<p class="note" style="margin:4px 0 0">No recent matches</p>'}</div>
+      ${top.length?`<div><span class="lab">Top mastery</span><div class="chips">${top.slice(0,3).map(m=>`<span class="chip">${cicon(m)}${esc(m.n)} · ${fmt(m.pts)}</span>`).join('')}</div></div>`:''}
+      <a class="go" href="https://dpm.lol/${esc(encodeURIComponent(n+'-'+t))}" target="_blank" rel="noopener">View stats &amp; analysis (dpm.lol)</a>
+      <nav class="links">${links(a)}<button type="button" data-copy="${esc(a.riotId)}">Copy Riot ID</button></nav></div></article>`;
 }
 function combine(list,sel){
   const map=new Map();
@@ -198,35 +198,35 @@ function renderMastery(){
   const list=D.accounts,sel=$('#msel').value,q=$('#mq').value.trim().toLowerCase(),srt=$('#msort').value;
   let rows=combine(list,sel);
   const tot=rows.reduce((s,c)=>s+c.pts,0);
-  $('#mstats').innerHTML=rows.length?`<span><b>${fmt(rows.length)}</b> Champions</span><span><b>${fmt(tot)}</b> Punkte</span><span><b>${rows.filter(c=>c.lv>=10).length}</b> mit Level 10+</span><span><b>${rows.filter(c=>c.lv>=5).length}</b> mit Level 5+</span>`:'';
+  $('#mstats').innerHTML=rows.length?`<span><b>${fmt(rows.length)}</b> champions</span><span><b>${fmt(tot)}</b> points</span><span><b>${rows.filter(c=>c.lv>=10).length}</b> at level 10+</span><span><b>${rows.filter(c=>c.lv>=5).length}</b> at level 5+</span>`:'';
   if(q)rows=rows.filter(c=>c.n.toLowerCase().includes(q));
-  rows.sort(srt==='n'?(a,b)=>a.n.localeCompare(b.n,'de'):srt==='lv'?(a,b)=>b.lv-a.lv||b.pts-a.pts:srt==='last'?(a,b)=>b.last-a.last:(a,b)=>b.pts-a.pts);
-  if(!rows.length){$('#mtab').innerHTML=`<div class="empty">${q?'Kein Champion gefunden.':'Noch keine Mastery-Daten.'}</div>`;$('#bMore').hidden=true;return}
+  rows.sort(srt==='n'?(a,b)=>a.n.localeCompare(b.n,'en'):srt==='lv'?(a,b)=>b.lv-a.lv||b.pts-a.pts:srt==='last'?(a,b)=>b.last-a.last:(a,b)=>b.pts-a.pts);
+  if(!rows.length){$('#mtab').innerHTML=`<div class="empty">${q?'No champion found.':'No mastery data yet.'}</div>`;$('#bMore').hidden=true;return}
   const max=Math.max(...rows.map(r=>r.pts),1),multi=sel==='all'&&list.length>1;
-  $('#mtab').innerHTML=`<table class="stack"><thead><tr><th class="num">#</th><th>Champion</th><th>Level</th><th class="num">Punkte</th><th>Zuletzt gespielt</th></tr></thead><tbody>${
+  $('#mtab').innerHTML=`<table class="stack"><thead><tr><th class="num">#</th><th>Champion</th><th>Level</th><th class="num">Points</th><th>Last played</th></tr></thead><tbody>${
     rows.slice(0,mlimit).map((c,i)=>`<tr><td class="num" data-l="#">${i+1}</td>
       <td data-l="Champion"><div class="cn">${cicon(c)}<div>${esc(c.n)}${multi?`<small>${c.per.map(p=>esc(p.acc)+(c.per.length>1?' '+fmt(p.pts):'')).join(' · ')}</small>`:''}</div></div></td>
       <td data-l="Level"><span class="${lvCls(c.lv)}">${c.lv||'–'}</span></td>
-      <td class="num" data-l="Punkte"><div class="pb"><span class="t"><i style="width:${(c.pts/max*100).toFixed(1)}%"></i></span>${fmt(c.pts)}</div></td>
-      <td data-l="Zuletzt gespielt">${ago(c.last)}</td></tr>`).join('')}</tbody></table>`;
-  $('#bMore').hidden=rows.length<=mlimit;$('#bMore').textContent=`Alle ${rows.length} anzeigen`;
+      <td class="num" data-l="Points"><div class="pb"><span class="t"><i style="width:${(c.pts/max*100).toFixed(1)}%"></i></span>${fmt(c.pts)}</div></td>
+      <td data-l="Last played">${ago(c.last)}</td></tr>`).join('')}</tbody></table>`;
+  $('#bMore').hidden=rows.length<=mlimit;$('#bMore').textContent=`Show all ${rows.length}`;
 }
 function render(){
   const list=[...D.accounts].sort((x,y)=>rankScore(best(y))-rankScore(best(x)));
   D.accounts=list;ver=/^[\d.]+$/.test(D.ddragon||'')?D.ddragon:'';
   if(D.title){$('#title').textContent=D.title;document.title=D.title}
-  $('#upd').textContent=D.updated?'Automatisch aktualisiert · Stand '+ago(Date.parse(D.updated)):'';
+  $('#upd').textContent=D.updated?'Updated automatically · last update '+ago(Date.parse(D.updated)):'';
   renderStats(list);
-  $('#accs').innerHTML=list.length?list.map(card).join(''):'<div class="empty">Noch keine Accounts.</div>';
-  $('#msel').innerHTML='<option value="all">Alle Accounts zusammen</option>'+list.map((a,i)=>`<option value="${i}">${esc(a.riotId)}</option>`).join('');
+  $('#accs').innerHTML=list.length?list.map(card).join(''):'<div class="empty">No accounts yet.</div>';
+  $('#msel').innerHTML='<option value="all">All accounts combined</option>'+list.map((a,i)=>`<option value="${i}">${esc(a.riotId)}</option>`).join('');
   renderMastery();
 }
 $('#mq').oninput=$('#msel').onchange=$('#msort').onchange=()=>{mlimit=25;renderMastery()};
 $('#bMore').onclick=()=>{mlimit=1e4;renderMastery()};
 $('#accs').addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;
-  try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Kopiert ✓'}catch(_){b.textContent=b.dataset.copy}setTimeout(()=>b.textContent='Riot-ID kopieren',1800)});
+  try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Copied ✓'}catch(_){b.textContent=b.dataset.copy}setTimeout(()=>b.textContent='Copy Riot ID',1800)});
 fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{D=d&&Array.isArray(d.accounts)?d:{accounts:[]};render()})
-  .catch(()=>{$('#upd').textContent='Daten konnten nicht geladen werden.';$('#accs').innerHTML='<div class="empty">Noch keine Daten – das erste automatische Update läuft gleich.</div>'});
+  .catch(()=>{$('#upd').textContent='Could not load data.';$('#accs').innerHTML='<div class="empty">No data yet – the first automatic update is running.</div>'});
 }
 </script>
 </body>
