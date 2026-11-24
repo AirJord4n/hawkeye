@@ -50,7 +50,7 @@ label{font-size:14px;font-weight:600;display:block}label input,label select{marg
 .meta{margin:2px 0 0;color:var(--mut);font-size:14px}
 .cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .cmp>div{background:var(--bg);border-radius:8px;padding:8px 10px}
-.cmp small,.lab{color:var(--mut);font-size:13px;display:block}
+.cmp small,.lab,.cmp .sm{color:var(--mut);font-size:13px;display:block}
 .perf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));text-align:center;gap:4px}
 .perf b{display:block;font-size:19px;font-variant-numeric:tabular-nums}.perf small{color:var(--mut);font-size:13px}
 .wr{height:6px;background:light-dark(#f2d5d0,#3a2026);border-radius:3px;margin-top:5px;overflow:hidden}.wr i{display:block;height:100%;background:var(--tea)}
@@ -163,10 +163,9 @@ function renderStats(list){
   $('#stats').innerHTML=st.map(([l,v,s,tier])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<img src="${CREST}${tier.toLowerCase()}.svg" alt="" onerror="this.remove()">`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
 }
 function card(a){
-  const [n,t]=split(a.riotId),cur=a.solo||a.flex,curL=a.solo?'Solo/Duo':a.flex?'Flex':'Solo/Duo';
+  const [n,t]=split(a.riotId),cur=a.solo||a.flex;
   const top=[...(a.mastery||[])].sort((x,y)=>y.pts-x.pts),st=(a.seasonTop||[])[0],hero=st||top[0];
-  const g=games(cur),wr=g?Math.round(cur.w/g*100):0;
-  const peak=a.peak&&rankScore(a.peak)>=rankScore(a.solo)?a.peak:a.solo;
+  const so=a.solo,g=games(so),wr=g?Math.round(so.w/g*100):0;
   const splash=hero&&safe(hero.c)?`background-image:url('${DD}img/champion/splash/${safe(hero.c)}_0.jpg'),linear-gradient(130deg,hsl(${hue(hero.n)} 50% 32%),#0a1428)`:'';
   const rec=(a.recent||[]).slice(0,5);
   const icon=Number.isInteger(a.icon)&&ver?`<span class="pi"><img src="${DD}${ver}/img/profileicon/${a.icon}.png" alt="" loading="lazy" onerror="this.remove()"></span>`:'';
@@ -174,9 +173,8 @@ function card(a){
     <div class="ban" style="--h:${hue(hero?hero.n:n)};--t:${cur?TCOL[cur.tier]:'var(--gold)'};${splash}">${st?`<span class="tc" title="Most played champion this season${a.seasonDone===false?' (still counting)':''}">Most played: ${esc(st.n)} · ${fmt(st.games)} games${a.seasonDone===false?' …':''}</span>`:hero?`<span class="tc">Top mastery: ${esc(hero.n)}</span>`:''}${emb(cur)}${icon}</div>
     <div class="in">
       <div><h3>${esc(n)}<span>#${esc(t)}</span></h3><p class="meta">${a.level?'Level '+fmt(a.level):'Level –'}${a.note?' · '+esc(a.note):''}</p></div>
-      <div class="cmp"><div><small>Current · ${curL}</small>${rk(cur)}</div><div><small>All-time peak</small>${rk(peak)}</div></div>
-      ${g?`<div><div class="perf"><div><b>${wr}%</b><small>Win rate</small></div><div><b>${fmt(cur.w)}</b><small>Wins</small></div><div><b>${fmt(cur.l)}</b><small>Losses</small></div><div><b>${fmt(g)}</b><small>Games</small></div></div><div class="wr"><i style="width:${wr}%"></i></div></div>`:''}
-      ${a.solo&&a.flex?`<p class="meta" style="margin:0">Flex: ${esc(rankTxt(a.flex))} · ${fmt(a.flex.lp)} LP · ${fmt(a.flex.w)}W / ${fmt(a.flex.l)}L</p>`:''}
+      <div class="cmp"><div><small>Solo/Duo</small>${rk(a.solo)}</div><div><small>Flex</small>${rk(a.flex)}${games(a.flex)?`<span class="sm">${fmt(a.flex.w)}W / ${fmt(a.flex.l)}L · ${Math.round(a.flex.w/games(a.flex)*100)}%</span>`:''}</div></div>
+      ${g?`<div><div class="perf"><div><b>${wr}%</b><small>Win rate</small></div><div><b>${fmt(so.w)}</b><small>Wins</small></div><div><b>${fmt(so.l)}</b><small>Losses</small></div><div><b>${fmt(g)}</b><small>Games</small></div></div><div class="wr"><i style="width:${wr}%"></i></div></div>`:''}
       <div><span class="lab">Last 5 matches</span>${rec.length?`<div class="rec">${rec.map(m=>`<div class="mt ${m.win?'w':'l'}" title="${esc(m.n)} · ${m.win?'Win':'Loss'}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}">${cicon(m)}<div>${+m.k||0}/${+m.d||0}/${+m.a||0}</div></div>`).join('')}</div>`:'<p class="note" style="margin:4px 0 0">No recent matches</p>'}</div>
       ${top.length?`<div><span class="lab">Top mastery</span><div class="chips">${top.slice(0,3).map(m=>`<span class="chip">${cicon(m)}${esc(m.n)} · ${fmt(m.pts)}</span>`).join('')}</div></div>`:''}
       <a class="go" href="https://dpm.lol/${esc(encodeURIComponent(n+'-'+t))}" target="_blank" rel="noopener">View stats &amp; analysis (dpm.lol)</a>
