@@ -91,7 +91,49 @@ def previous_data():
     return {}
 
 
-def fetch(acc_cfg, region, key, champs):
+MATCH_CACHE = {}
+BUDGET = {"left": int(os.environ.get("SEASON_BUDGET", "600"))}  # max. neue Match-Details pro Lauf
+
+
+def match(mbase, mid, key):
+    if mid not in MATCH_CACHE:
+        MATCH_CACHE[mid] = get(f"{mbase}/{mid}", key)
+    return MATCH_CACHE[mid]
+
+
+def season_stats(puuid, mbase, key, start, prev_season):
+    """Zaehlt alle Spiele seit Saisonstart pro Champion. Bereits gezaehlte Matches
+    werden aus dem letzten Lauf uebernommen, damit nur neue Spiele abgefragt werden."""
+    start_ts = int(datetime.fromisoformat(start).replace(tzinfo=timezone.utc).timestamp())
+    old = prev_season if prev_season and prev_season.get("start") == start else {}
+    seen = set(old.get("ids", []))
+    champs = {k: list(v) for k, v in (old.get("champs") or {}).items()}
+    ids, page = [], 0
+    while True:
+        batch = get(f"{mbase}/by-puuid/{puuid}/ids?startTime={start_ts}&start={page}&count=100", key) or []
+        ids += batch
+        if len(batch) < 100:
+            break
+        page += 100
+    pending = [m for m in ids if m not in seen]
+    for mid in pending:
+        if BUDGET["left"] <= 0 and mid not in MATCH_CACHE:
+            break
+        if mid not in MATCH_CACHE:
+            BUDGET["left"] -= 1
+        info = (match(mbase, mid, key) or {}).get("info", {})
+        me = next((p for p in info.get("participants", []) if p.get("puuid") == puuid), None)
+        seen.add(mid)
+        if not me:
+            continue
+        c = champs.setdefault(str(me.get("championId")), [0, 0])
+        c[0] += 1
+        c[1] += 1 if me.get("win") else 0
+    done = all(m in seen for m in ids)
+    return {"start": start, "ids": sorted(seen), "champs": champs, "done": done}
+
+
+def fetch(acc_cfg, region, key, champs, season_start, prev_acc):
     platform, cluster, mcluster = REGIONS[region]
     rid = acc_cfg["riotId"]
     name, tag = rid.rsplit("#", 1)
@@ -129,8 +171,7 @@ def fetch(acc_cfg, region, key, champs):
     out["recent"] = []
     mbase = f"https://{mcluster}.api.riotgames.com/lol/match/v5/matches"
     for mid in get(f"{mbase}/by-puuid/{puuid}/ids?start=0&count=5", key) or []:
-        match = get(f"{mbase}/{mid}", key)
-        info = (match or {}).get("info", {})
+        info = (match(mbase, mid, key) or {}).get("info", {})
         me = next((p for p in info.get("participants", []) if p.get("puuid") == puuid), None)
         if not me:
             continue
@@ -138,6 +179,15 @@ def fetch(acc_cfg, region, key, champs):
                               "k": me.get("kills", 0), "d": me.get("deaths", 0), "a": me.get("assists", 0),
                               "q": info.get("queueId", 0),
                               "t": info.get("gameEndTimestamp") or info.get("gameCreation", 0)})
+
+    # Meistgespielte Champions der aktuellen Season
+    s = season_stats(puuid, mbase, key, season_start, (prev_acc or {}).get("season"))
+    out["season"] = s
+    games = sum(v[0] for v in s["champs"].values())
+    top = sorted(s["champs"].items(), key=lambda kv: (-kv[1][0], -kv[1][1]))[:3]
+    out["seasonGames"] = games
+    out["seasonDone"] = s["done"]
+    out["seasonTop"] = [{**champ(int(cid)), "games": g, "wins": w} for cid, (g, w) in top]
     return out
 
 
@@ -148,6 +198,7 @@ def main():
     with open(CONFIG, encoding="utf-8") as f:
         cfg = json.load(f)
     region = cfg.get("region", "euw").lower()
+    season_start = cfg.get("seasonStart", "2026-01-08")
 
     versions = get("https://ddragon.leagueoflegends.com/api/versions.json")
     ver = versions[0]
@@ -164,7 +215,7 @@ def main():
             continue
         print(f"Hole {rid} ...")
         try:
-            acc = fetch(a, reg, key, champs)
+            acc = fetch(a, reg, key, champs, season_start, prev.get(rid.lower()))
         except RiotError as e:
             print(f"  Fehler: {e}")
             errors.append(f"{rid}: {e}")
@@ -183,7 +234,7 @@ def main():
     if not accounts:
         sys.exit("Keine Daten geholt: " + "; ".join(errors))
     data = {"title": cfg.get("title", "Meine LoL-Accounts"), "owner": cfg.get("owner", ""),
-            "ddragon": ver, "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "ddragon": ver, "seasonStart": season_start, "updated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
             "accounts": accounts}
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
