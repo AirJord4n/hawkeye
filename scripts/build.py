@@ -202,7 +202,7 @@ def main():
 
     versions = get("https://ddragon.leagueoflegends.com/api/versions.json")
     ver = versions[0]
-    raw = get(f"https://ddragon.leagueoflegends.com/cdn/{ver}/data/de_DE/champion.json")["data"]
+    raw = get(f"https://ddragon.leagueoflegends.com/cdn/{ver}/data/en_US/champion.json")["data"]
     champs = {int(c["key"]): {"id": c["id"], "name": c["name"]} for c in raw.values()}
 
     prev = {a["riotId"].lower(): a for a in previous_data().get("accounts", []) if a.get("riotId")}
