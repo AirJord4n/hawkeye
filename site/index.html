@@ -26,6 +26,7 @@ h1{font-size:clamp(32px,5vw,48px)}h2{font-size:clamp(24px,3vw,32px);margin-botto
 .stat small{display:block;color:#8f9bb0;font-size:14px}
 .big{font-size:clamp(22px,3vw,32px);color:#f0e6d2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat .sub{font-size:14px;color:#0ac8b9}
+.big img{height:1.15em;width:1.15em;object-fit:contain;vertical-align:-0.2em;margin-right:8px}
 :focus-visible{outline:3px solid var(--tea);outline-offset:2px}
 input,select,button{font:16px "Source Sans 3",sans-serif;min-height:44px;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
 button{width:auto;font-weight:600;cursor:pointer;padding:0 18px}button:hover{border-color:var(--tea)}
@@ -156,10 +157,10 @@ function renderStats(list){
   let w=0,l=0;for(const a of list)for(const r of [a.solo,a.flex])if(r){w+=+r.w||0;l+=+r.l||0}
   const lv=list.reduce((s,a)=>s+(+a.level||0),0);
   const st=[['Accounts',list.length,lv?'Level gesamt '+fmt(lv):''],
-    ['Bester Rang',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP':''],
+    ['Bester Rang (aktuell)',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP · '+(top.r===top.a.solo?'Solo/Duo':'Flex'):'',top&&top.r.tier],
     ['Siegquote gesamt',w+l?Math.round(w/(w+l)*100)+' %':'–',w+l?fmt(w+l)+' Ranked-Spiele':''],
     ['Mastery-Punkte',fmt(tot),all[0]?'Top-Mastery: '+all[0].n:'']];
-  $('#stats').innerHTML=st.map(([l,v,s])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
+  $('#stats').innerHTML=st.map(([l,v,s,tier])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<img src="${CREST}${tier.toLowerCase()}.svg" alt="" onerror="this.remove()">`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
 }
 function card(a){
   const [n,t]=split(a.riotId),cur=a.solo||a.flex,curL=a.solo?'Solo/Duo':a.flex?'Flex':'Solo/Duo';
