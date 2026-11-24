@@ -2,7 +2,7 @@ name: Seite aktualisieren
 
 on:
   schedule:
-    - cron: "23 */6 * * *"   # alle 6 Stunden
+    - cron: "13,43 * * * *"  # alle 30 Minuten
   workflow_dispatch:          # Knopf "Run workflow" fuer sofortiges Update
   push:
     branches: [main]
