@@ -37,9 +37,11 @@ label{font-size:14px;font-weight:600;display:block}label input,label select{marg
 .ban::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0a142833,#0a1428cc)}
 .ban>*{z-index:1}
 .ban .tc{position:absolute;right:12px;top:10px;color:#fff;font-size:13px;background:#0008;padding:2px 8px;border-radius:4px}
-.em{width:58px;height:66px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--c,#556);display:grid;place-items:center;font:700 15px Cinzel,serif;color:#fff;text-shadow:0 1px 2px #0008}
-.em.none{background:#2a3a52;color:#9aa7b8;text-shadow:none}
-.ban .em{position:absolute;left:18px;bottom:-30px}
+.em{width:64px;height:64px;position:relative;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #000a)}
+.em img{width:100%;height:100%;object-fit:contain}
+.em b{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:#0a1428;color:#f0e6d2;border:1px solid var(--c,#556);border-radius:4px;font:700 11px/1 "Source Sans 3",sans-serif;padding:2px 5px;white-space:nowrap}
+.em .fb{width:48px;height:54px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--c,#2a3a52)}
+.ban .em{position:absolute;left:14px;bottom:-32px}
 .pi{position:absolute;left:84px;bottom:-24px;width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);background:#1e2d45;overflow:hidden}
 .pi img{width:100%;height:100%;display:block}
 .in{padding:38px 18px 18px;display:flex;flex-direction:column;gap:14px}
@@ -138,7 +140,8 @@ const lvCls=l=>l>=10?'lv m10':l>=5?'lv m5':'lv';
 const games=r=>r?(+r.w||0)+(+r.l||0):0;
 let D={accounts:[]},ver='',mlimit=25;
 const cicon=(m,cls='ci')=>`<span class="${cls}" style="--h:${hue(m.n)}" aria-hidden="true">${esc(ini(m.n))}${safe(m.c)&&ver?`<img src="${DD}${ver}/img/champion/${safe(m.c)}.png" alt="" loading="lazy" onerror="this.remove()">`:''}</span>`;
-const emb=r=>r?`<div class="em" style="--c:${TCOL[r.tier]||'#556'}">${isMP(r.tier)?(r.tier==='MASTER'?'M':r.tier==='GRANDMASTER'?'GM':'C'):esc(r.div||'')}</div>`:`<div class="em none">–</div>`;
+const CREST='https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/';
+const emb=r=>{const t=r&&TIERS.includes(r.tier)?r.tier.toLowerCase():'unranked';return `<div class="em" style="--c:${r?TCOL[r.tier]||'#556':'#2a3a52'}" title="${esc(rankTxt(r))}"><img src="${CREST}${t}.svg" alt="${esc(rankTxt(r))}" onerror="this.outerHTML='<span class=fb></span>'">${r&&!isMP(r.tier)&&r.div?`<b>${esc(r.div)}</b>`:''}</div>`};
 const rk=r=>r?`<b>${esc(rankTxt(r))}</b> · ${fmt(r.lp)} LP`:'<b>Ungewertet</b>';
 
 function links(a){
@@ -155,19 +158,19 @@ function renderStats(list){
   const st=[['Accounts',list.length,lv?'Level gesamt '+fmt(lv):''],
     ['Bester Rang',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP':''],
     ['Siegquote gesamt',w+l?Math.round(w/(w+l)*100)+' %':'–',w+l?fmt(w+l)+' Ranked-Spiele':''],
-    ['Mastery-Punkte',fmt(tot),all[0]?'Meistgespielt: '+all[0].n:'']];
+    ['Mastery-Punkte',fmt(tot),all[0]?'Top-Mastery: '+all[0].n:'']];
   $('#stats').innerHTML=st.map(([l,v,s])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
 }
 function card(a){
   const [n,t]=split(a.riotId),cur=a.solo||a.flex,curL=a.solo?'Solo/Duo':a.flex?'Flex':'Solo/Duo';
-  const top=[...(a.mastery||[])].sort((x,y)=>y.pts-x.pts),hero=top[0];
+  const top=[...(a.mastery||[])].sort((x,y)=>y.pts-x.pts),st=(a.seasonTop||[])[0],hero=st||top[0];
   const g=games(cur),wr=g?Math.round(cur.w/g*100):0;
   const peak=a.peak&&rankScore(a.peak)>=rankScore(a.solo)?a.peak:a.solo;
   const splash=hero&&safe(hero.c)?`background-image:url('${DD}img/champion/splash/${safe(hero.c)}_0.jpg'),linear-gradient(130deg,hsl(${hue(hero.n)} 50% 32%),#0a1428)`:'';
   const rec=(a.recent||[]).slice(0,5);
   const icon=Number.isInteger(a.icon)&&ver?`<span class="pi"><img src="${DD}${ver}/img/profileicon/${a.icon}.png" alt="" loading="lazy" onerror="this.remove()"></span>`:'';
   return `<article class="acc">
-    <div class="ban" style="--h:${hue(hero?hero.n:n)};--t:${cur?TCOL[cur.tier]:'var(--gold)'};${splash}">${hero?`<span class="tc">Top: ${esc(hero.n)}</span>`:''}${emb(cur)}${icon}</div>
+    <div class="ban" style="--h:${hue(hero?hero.n:n)};--t:${cur?TCOL[cur.tier]:'var(--gold)'};${splash}">${st?`<span class="tc" title="Meistgespielter Champion seit Saisonstart${a.seasonDone===false?' (Zählung läuft noch)':''}">Season: ${esc(st.n)} · ${fmt(st.games)} Spiele${a.seasonDone===false?' …':''}</span>`:hero?`<span class="tc">Top-Mastery: ${esc(hero.n)}</span>`:''}${emb(cur)}${icon}</div>
     <div class="in">
       <div><h3>${esc(n)}<span>#${esc(t)}</span></h3><p class="meta">${a.level?'Level '+fmt(a.level):'Level –'}${a.note?' · '+esc(a.note):''}</p></div>
       <div class="cmp"><div><small>Aktuell · ${curL}</small>${rk(cur)}</div><div><small>Allzeit-Bestleistung</small>${rk(peak)}</div></div>
