@@ -37,9 +37,9 @@ h2{font-size:20px;font-weight:600;margin:40px 0 14px;letter-spacing:-.01em}
 .lab{font-size:12px;color:var(--mut)}
 .rank{font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
 .sub{font-size:13px;color:var(--acc2)}
-.ring{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;flex:none}
-.ring div{width:66px;height:66px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center;font-size:15px;font-weight:600;line-height:1.1}
-.ring small{display:block;font-size:10px;color:var(--mut);font-weight:400}
+.ring{width:100px;height:100px;border-radius:50%;display:grid;place-items:center;flex:none}
+.ring div{width:84px;height:84px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center;font-size:20px;font-weight:600;line-height:1.1}
+.ring small{display:block;font-size:11px;color:var(--mut);font-weight:400}
 .ft{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--mut);flex-wrap:wrap}
 .mp{display:flex;align-items:center;gap:8px}
 .ci{width:26px;height:26px;border-radius:8px;overflow:hidden;background:#3b3054;flex:none;display:inline-grid;place-items:center;font-size:10px;font-weight:600;color:var(--acc2);position:relative}
@@ -145,7 +145,7 @@ function card(a){
   const rec=(a.recent||[]).slice(0,5);
   const slug=encodeURIComponent(n+'-'+t),r=a.region||'euw',p=REG[r]||'euw1';
   const icon=Number.isInteger(a.icon)&&ver?`<img src="${DD}${ver}/img/profileicon/${a.icon}.png" alt="" loading="lazy" onerror="this.remove()">`:'';
-  const sub=main?`${fmt(main.lp)} LP${so&&fl?` · Flex ${esc(rankTxt(fl))}`:(!so&&fl?' · Flex':'')}`:'No ranked games this season';
+  const sub=main?`${fmt(main.lp)} LP${so&&fl?`<br>Flex ${esc(rankTxt(fl))} · ${fmt(fl.lp)} LP`:(!so&&fl?' · Flex':'')}`:'No ranked games this season';
   const links=[['op.gg',`https://op.gg/lol/summoners/${r}/${slug}`],['u.gg',`https://u.gg/lol/profile/${p}/${encodeURIComponent((n+'-'+t).toLowerCase())}/overview`],['League of Graphs',`https://www.leagueofgraphs.com/summoner/${r}/${slug}`],['Live game (Porofessor)',`https://porofessor.gg/live/${r}/${slug}`]];
   return `<article class="c">
     <div class="hd"><span class="av">${icon}</span><div class="nm"><b>${esc(n)} <span>#${esc(t)}</span></b><small>Level ${a.level?fmt(a.level):'–'}${a.note?' · '+esc(a.note):''}</small></div>
