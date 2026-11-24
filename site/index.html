@@ -8,6 +8,217 @@
 <meta property="og:title" content="Hawkeye&#39;s Account Hall">
 <meta property="og:description" content="Ranks, recent matches and champion mastery – updated automatically.">
 <meta property="og:type" content="website">
+<meta name="theme-color" content="#0e0e12">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#0e0e12;--card:#17171d;--card2:#1d1d25;--line:#26262e;--ink:#ececf1;--mut:#7c7c88;--acc:#9b5cff;--acc2:#c4a8ff;--pill:#2a1f45;--win:#3ddc97;--loss:#ff5c7a;color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1160px;margin:0 auto;padding:clamp(20px,4vw,48px) max(4vw,16px)}
+h1{font-size:clamp(26px,4vw,36px);font-weight:700;letter-spacing:-.02em;margin:0;line-height:1.15}
+h2{font-size:20px;font-weight:600;margin:40px 0 14px;letter-spacing:-.01em}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.upd{color:var(--mut);font-size:13px;margin-top:6px}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:var(--pill);color:var(--acc2);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.pill i{display:inline-block;width:22px;height:22px;margin:-4px -2px -4px -4px;background:center/370% auto no-repeat}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:14px;margin-top:24px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:16px;transition:border-color .2s}
+.c:hover{border-color:#3a3250}
+.hd{display:flex;align-items:center;gap:12px}
+.av{width:44px;height:44px;border-radius:50%;background:#3b3054;overflow:hidden;flex:none;border:2px solid var(--pill)}
+.av img{width:100%;height:100%;display:block}
+.nm{flex:1}.nm b{font-size:16px;font-weight:600;overflow-wrap:anywhere}.nm b span{color:var(--mut);font-weight:400}
+.nm small{display:block;color:var(--mut);font-size:12px}
+.emb{width:58px;height:58px;flex:none;background:center/370% auto no-repeat;position:relative}
+.emb.un{background-size:62% auto;opacity:.6}
+.mid{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lab{font-size:12px;color:var(--mut)}
+.rank{font-size:24px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.sub{font-size:13px;color:var(--acc2)}
+.ring{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;flex:none}
+.ring div{width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;text-align:center;font-size:15px;font-weight:600;line-height:1.1}
+.ring small{display:block;font-size:10px;color:var(--mut);font-weight:400}
+.ft{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--mut);flex-wrap:wrap}
+.mp{display:flex;align-items:center;gap:8px}
+.ci{width:26px;height:26px;border-radius:8px;overflow:hidden;background:#3b3054;flex:none;display:inline-grid;place-items:center;font-size:10px;font-weight:600;color:var(--acc2);position:relative}
+.ci img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dots{display:flex;gap:5px}
+.dots i{width:10px;height:10px;border-radius:50%;display:block}
+.w{background:var(--win)}.l{background:var(--loss)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.go{flex:1;text-align:center;background:var(--acc);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 14px;border-radius:10px;min-height:42px;display:flex;align-items:center;justify-content:center}
+.go:hover{background:#8a49f0}
+.more{position:relative}
+.more summary{list-style:none;cursor:pointer;background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:0 12px;min-height:42px;display:flex;align-items:center;font-size:14px}
+.more summary::-webkit-details-marker{display:none}
+.menu{position:absolute;right:0;bottom:48px;background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:6px;min-width:190px;z-index:5;box-shadow:0 12px 30px #0008}
+.menu a,.menu button{display:block;width:100%;text-align:left;color:var(--ink);text-decoration:none;padding:9px 10px;border-radius:8px;font:14px Inter,sans-serif;background:none;border:0;cursor:pointer}
+.menu a:hover,.menu button:hover{background:var(--pill)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,1.2fr);gap:10px;margin-bottom:14px}
+input,select{font:15px Inter,sans-serif;width:100%;min-height:42px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink)}
+.ms{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;color:var(--mut);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cn{display:flex;align-items:center;gap:10px}.cn .ci{width:34px;height:34px}.cn small{display:block;color:var(--mut);font-size:12px}
+.lv{display:inline-block;min-width:34px;text-align:center;padding:3px 8px;border-radius:999px;font-size:13px;font-weight:600;background:var(--card2);color:var(--mut)}
+.lv.m5{background:var(--pill);color:var(--acc2)}.lv.m10{background:var(--acc);color:#fff}
+.pb{display:flex;align-items:center;gap:10px;justify-content:flex-end}.pb .t{width:min(150px,20vw);height:6px;background:var(--line);border-radius:3px;overflow:hidden}.pb .t i{display:block;height:100%;background:var(--acc)}
+.showall{display:flex;justify-content:center;margin-top:12px}
+.showall button{font:600 14px Inter,sans-serif;background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:0 16px;min-height:42px;cursor:pointer}
+.empty{padding:28px;text-align:center;color:var(--mut)}
+footer{color:var(--mut);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:18px}footer p{margin:0 0 6px;max-width:80ch}
+@media(max-width:700px){.filters{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 4px;padding-inline-start:calc(7em + 4px);text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:6.5em;margin-inline-start:-7em;color:var(--mut);font-size:12px}.pb{justify-content:flex-start}}
+@media(prefers-reduced-motion:no-preference){.c{animation:up .35s ease both}@keyframes up{from{opacity:0;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div><h1 id="title">Hawkeye's Account Hall</h1><div class="upd" id="upd">Loading data…</div></div>
+    <div class="pills" id="pills"></div>
+  </div>
+  <div class="grid" id="accs"><div class="empty">Loading accounts…</div></div>
+
+  <h2>Champion mastery</h2>
+  <div class="panel">
+    <div class="filters">
+      <input id="mq" type="search" placeholder="Search champion" aria-label="Search champion">
+      <select id="msel" aria-label="Account"><option value="all">All accounts combined</option></select>
+      <select id="msort" aria-label="Sort by"><option value="pts">Mastery points</option><option value="lv">Mastery level</option><option value="last">Last played</option><option value="n">Name</option></select>
+    </div>
+    <div class="ms" id="mstats"></div>
+    <div id="mtab"></div>
+    <div class="showall"><button id="bMore" hidden>Show all</button></div>
+  </div>
+
+  <footer>
+    <p>Data from the official Riot Games API, updated automatically.</p>
+    <p>This site isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+  </footer>
+</div>
+
+<script>
+{
+const TIERS=['IRON','BRONZE','SILVER','GOLD','PLATINUM','EMERALD','DIAMOND','MASTER','GRANDMASTER','CHALLENGER'];
+const TN={IRON:'Iron',BRONZE:'Bronze',SILVER:'Silver',GOLD:'Gold',PLATINUM:'Platinum',EMERALD:'Emerald',DIAMOND:'Diamond',MASTER:'Master',GRANDMASTER:'Grandmaster',CHALLENGER:'Challenger'};
+const DIVS=['IV','III','II','I'];
+const REG={euw:'euw1',eune:'eun1',na:'na1',kr:'kr',br:'br1',lan:'la1',las:'la2',oce:'oc1',tr:'tr1',ru:'ru',jp:'jp1',me:'me1',sg:'sg2',tw:'tw2',vn:'vn2'};
+const QN={420:'Solo/Duo',440:'Flex',450:'ARAM',400:'Normal (Draft)',430:'Normal (Blind)',490:'Quickplay',1700:'Arena',1900:'URF',900:'ARURF'};
+const DD='https://ddragon.leagueoflegends.com/cdn/';
+const EMB='https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-';
+const UNR='https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/unranked.svg';
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n||0).toLocaleString('en-US');
+const ini=s=>String(s).replace(/[^A-Za-zÀ-ÿ ]/g,'').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?';
+const safe=c=>/^[A-Za-z0-9]+$/.test(c||'')?c:'';
+const ago=t=>{if(!t)return '–';const m=Math.floor((Date.now()-t)/6e4);if(m<60)return `${Math.max(m,1)} min ago`;const h=Math.floor(m/60);if(h<24)return `${h} h ago`;const d=Math.floor(h/24);return d<2?'yesterday':d<60?`${d} days ago`:d<730?`${Math.round(d/30)} months ago`:`${Math.round(d/365)} years ago`};
+const isMP=t=>['MASTER','GRANDMASTER','CHALLENGER'].includes(t);
+const rankTxt=r=>r?`${TN[r.tier]||r.tier}${isMP(r.tier)?'':' '+(r.div||'')}`:'Unranked';
+const rankScore=r=>r&&TIERS.includes(r.tier)?TIERS.indexOf(r.tier)*1000+(isMP(r.tier)?0:Math.max(DIVS.indexOf(r.div),0)*100)+(+r.lp||0):-1;
+const best=a=>[a.solo,a.flex].filter(Boolean).sort((x,y)=>rankScore(y)-rankScore(x))[0]||null;
+const split=id=>{const i=String(id).lastIndexOf('#');return i<0?[id,'']:[id.slice(0,i),id.slice(i+1)]};
+const games=r=>r?(+r.w||0)+(+r.l||0):0;
+const embUrl=r=>r&&TIERS.includes(r.tier)?`${EMB}${r.tier.toLowerCase()}.png`:'';
+let D={accounts:[]},ver='',mlimit=25;
+const cicon=m=>`<span class="ci" aria-hidden="true">${esc(ini(m.n))}${safe(m.c)&&ver?`<img src="${DD}${ver}/img/champion/${safe(m.c)}.png" alt="" loading="lazy" onerror="this.remove()">`:''}</span>`;
+
+function renderTop(list){
+  const top=list.map(a=>({a,r:best(a)})).filter(x=>x.r).sort((x,y)=>rankScore(y.r)-rankScore(x.r))[0];
+  let w=0,l=0;for(const a of list)for(const r of [a.solo,a.flex])if(r){w+=+r.w||0;l+=+r.l||0}
+  const pills=[`${list.length} accounts`];
+  if(top)pills.push(`<i style="background-image:url('${embUrl(top.r)}')"></i>Best: ${esc(rankTxt(top.r))}`);
+  if(w+l)pills.push(`${Math.round(w/(w+l)*100)}% WR · ${fmt(w+l)} ranked games`);
+  $('#pills').innerHTML=pills.map(p=>`<span class="pill">${p}</span>`).join('');
+}
+function card(a){
+  const [n,t]=split(a.riotId),so=a.solo,fl=a.flex,main=so||fl,g=games(main),wr=g?Math.round(main.w/g*100):0;
+  const st=(a.seasonTop||[])[0],mt=[...(a.mastery||[])].sort((x,y)=>y.pts-x.pts)[0],fav=st||mt;
+  const rec=(a.recent||[]).slice(0,5);
+  const slug=encodeURIComponent(n+'-'+t),r=a.region||'euw',p=REG[r]||'euw1';
+  const icon=Number.isInteger(a.icon)&&ver?`<img src="${DD}${ver}/img/profileicon/${a.icon}.png" alt="" loading="lazy" onerror="this.remove()">`:'';
+  const sub=main?`${fmt(main.lp)} LP${so&&fl?` · Flex ${esc(rankTxt(fl))}`:(!so&&fl?' · Flex':'')}`:'No ranked games this season';
+  const links=[['op.gg',`https://op.gg/lol/summoners/${r}/${slug}`],['u.gg',`https://u.gg/lol/profile/${p}/${encodeURIComponent((n+'-'+t).toLowerCase())}/overview`],['League of Graphs',`https://www.leagueofgraphs.com/summoner/${r}/${slug}`],['Live game (Porofessor)',`https://porofessor.gg/live/${r}/${slug}`]];
+  return `<article class="c">
+    <div class="hd"><span class="av">${icon}</span><div class="nm"><b>${esc(n)} <span>#${esc(t)}</span></b><small>Level ${a.level?fmt(a.level):'–'}${a.note?' · '+esc(a.note):''}</small></div>
+      ${main?`<span class="emb" role="img" aria-label="${esc(rankTxt(main))}" style="background-image:url('${embUrl(main)}')"></span>`:`<span class="emb un" role="img" aria-label="Unranked" style="background-image:url('${UNR}')"></span>`}</div>
+    <div class="mid"><div><div class="lab">${so?'Solo/Duo':fl?'Flex':'Ranked'}</div><div class="rank">${esc(rankTxt(main))}</div><div class="sub">${sub}</div></div>
+      ${g?`<div class="ring" style="background:conic-gradient(var(--acc) 0 ${wr}%,var(--line) 0)" title="${fmt(main.w)} wins / ${fmt(main.l)} losses"><div>${wr}%<small>${fmt(g)} games</small></div></div>`:''}</div>
+    <div class="ft">${fav?`<span class="mp">${cicon(fav)}<span>${st?`Most played: ${esc(st.n)} · ${fmt(st.games)}${a.seasonDone===false?' …':''}`:`Top mastery: ${esc(mt.n)}`}</span></span>`:'<span></span>'}
+      ${rec.length?`<span class="dots" aria-label="Last ${rec.length} matches">${rec.map(m=>`<i class="${m.win?'w':'l'}" title="${esc(m.n)} · ${m.win?'Win':'Loss'} · ${+m.k||0}/${+m.d||0}/${+m.a||0}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}"></i>`).join('')}</span>`:'<span>No recent matches</span>'}</div>
+    <div class="btns"><a class="go" href="https://dpm.lol/${esc(slug)}" target="_blank" rel="noopener">View stats (dpm.lol)</a>
+      <details class="more"><summary aria-label="More links">More</summary><div class="menu">${links.map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join('')}<button type="button" data-copy="${esc(a.riotId)}">Copy Riot ID</button></div></details></div>
+  </article>`;
+}
+function combine(list,sel){
+  const map=new Map();
+  list.forEach((a,i)=>{
+    if(sel!=='all'&&String(i)!==sel)return;
+    for(const m of a.mastery||[]){
+      const k=String(m.n).toLowerCase(),e=map.get(k)||{n:m.n,c:m.c,pts:0,lv:0,last:0,per:[]};
+      e.pts+=+m.pts||0;e.lv=Math.max(e.lv,+m.lv||0);e.last=Math.max(e.last,+m.last||0);
+      e.per.push({acc:split(a.riotId)[0],pts:+m.pts||0});map.set(k,e);
+    }
+  });
+  return [...map.values()];
+}
+function renderMastery(){
+  const list=D.accounts,sel=$('#msel').value,q=$('#mq').value.trim().toLowerCase(),srt=$('#msort').value;
+  let rows=combine(list,sel);
+  const tot=rows.reduce((s,c)=>s+c.pts,0);
+  $('#mstats').innerHTML=rows.length?[`${fmt(rows.length)} champions`,`${fmt(tot)} points`,`${rows.filter(c=>c.lv>=10).length} at level 10+`].map(x=>`<span class="pill">${x}</span>`).join(''):'';
+  if(q)rows=rows.filter(c=>c.n.toLowerCase().includes(q));
+  rows.sort(srt==='n'?(a,b)=>a.n.localeCompare(b.n,'en'):srt==='lv'?(a,b)=>b.lv-a.lv||b.pts-a.pts:srt==='last'?(a,b)=>b.last-a.last:(a,b)=>b.pts-a.pts);
+  if(!rows.length){$('#mtab').innerHTML=`<div class="empty">${q?'No champion found.':'No mastery data yet.'}</div>`;$('#bMore').hidden=true;return}
+  const max=Math.max(...rows.map(r=>r.pts),1),multi=sel==='all'&&list.length>1;
+  $('#mtab').innerHTML=`<table class="stack"><thead><tr><th class="num">#</th><th>Champion</th><th>Level</th><th class="num">Points</th><th>Last played</th></tr></thead><tbody>${
+    rows.slice(0,mlimit).map((c,i)=>`<tr><td class="num" data-l="#">${i+1}</td>
+      <td data-l="Champion"><div class="cn">${cicon(c)}<div>${esc(c.n)}${multi?`<small>${c.per.map(p=>esc(p.acc)+(c.per.length>1?' '+fmt(p.pts):'')).join(' · ')}</small>`:''}</div></div></td>
+      <td data-l="Level"><span class="lv ${c.lv>=10?'m10':c.lv>=5?'m5':''}">${c.lv||'–'}</span></td>
+      <td class="num" data-l="Points"><div class="pb"><span class="t"><i style="width:${(c.pts/max*100).toFixed(1)}%"></i></span>${fmt(c.pts)}</div></td>
+      <td data-l="Last played">${ago(c.last)}</td></tr>`).join('')}</tbody></table>`;
+  $('#bMore').hidden=rows.length<=mlimit;$('#bMore').textContent=`Show all ${rows.length}`;
+}
+function render(){
+  const list=[...D.accounts].sort((x,y)=>rankScore(best(y))-rankScore(best(x)));
+  D.accounts=list;ver=/^[\d.]+$/.test(D.ddragon||'')?D.ddragon:'';
+  if(D.title){$('#title').textContent=D.title;document.title=D.title}
+  $('#upd').textContent=D.updated?'Updated automatically · last update '+ago(Date.parse(D.updated)):'';
+  renderTop(list);
+  $('#accs').innerHTML=list.length?list.map(card).join(''):'<div class="empty">No accounts yet.</div>';
+  $('#msel').innerHTML='<option value="all">All accounts combined</option>'+list.map((a,i)=>`<option value="${i}">${esc(a.riotId)}</option>`).join('');
+  renderMastery();
+}
+$('#mq').oninput=$('#msel').onchange=$('#msort').onchange=()=>{mlimit=25;renderMastery()};
+$('#bMore').onclick=()=>{mlimit=1e4;renderMastery()};
+document.addEventListener('click',async e=>{
+  document.querySelectorAll('details.more[open]').forEach(d=>{if(!d.contains(e.target))d.open=false});
+  const b=e.target.closest('[data-copy]');if(!b)return;
+  try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Copied ✓'}catch(_){b.textContent=b.dataset.copy}setTimeout(()=>b.textContent='Copy Riot ID',1800)});
+fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{D=d&&Array.isArray(d.accounts)?d:{accounts:[]};render()})
+  .catch(()=>{$('#upd').textContent='Could not load data.';$('#accs').innerHTML='<div class="empty">No data yet – the first automatic update is running.</div>'});
+}
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hawkeye's Account Hall</title>
+<meta name="description" content="Ranks, recent matches and champion mastery for all of Hawkeye's LoL accounts.">
+<meta property="og:title" content="Hawkeye&#39;s Account Hall">
+<meta property="og:description" content="Ranks, recent matches and champion mastery – updated automatically.">
+<meta property="og:type" content="website">
 <meta name="theme-color" content="#0a1428">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
