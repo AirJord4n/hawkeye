@@ -26,7 +26,8 @@ h1{font-size:clamp(32px,5vw,48px)}h2{font-size:clamp(24px,3vw,32px);margin-botto
 .stat small{display:block;color:#8f9bb0;font-size:14px}
 .big{font-size:clamp(22px,3vw,32px);color:#f0e6d2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .stat .sub{font-size:14px;color:#0ac8b9}
-.big img{height:1.15em;width:1.15em;object-fit:contain;vertical-align:-0.2em;margin-right:8px}
+.ri{display:block;width:100%;height:100%;background:center/370% auto no-repeat}
+.big .ri{display:inline-block;width:1.6em;height:1.6em;vertical-align:-0.5em;margin:-0.2em 4px -0.2em -0.3em}
 :focus-visible{outline:3px solid var(--tea);outline-offset:2px}
 input,select,button{font:16px "Source Sans 3",sans-serif;min-height:44px;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
 button{width:auto;font-weight:600;cursor:pointer;padding:0 18px}button:hover{border-color:var(--tea)}
@@ -38,14 +39,14 @@ label{font-size:14px;font-weight:600;display:block}label input,label select{marg
 .ban::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0a142833,#0a1428cc)}
 .ban>*{z-index:1}
 .ban .tc{position:absolute;right:12px;top:10px;color:#fff;font-size:13px;background:#0008;padding:2px 8px;border-radius:4px}
-.em{width:64px;height:64px;position:relative;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #000a)}
+.em{width:84px;height:84px;position:relative;display:grid;place-items:center;filter:drop-shadow(0 2px 4px #000a)}
 .em img{width:100%;height:100%;object-fit:contain}
-.em b{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:#0a1428;color:#f0e6d2;border:1px solid var(--c,#556);border-radius:4px;font:700 11px/1 "Source Sans 3",sans-serif;padding:2px 5px;white-space:nowrap}
+.em b{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);background:#0a1428;color:#f0e6d2;border:1px solid var(--c,#556);border-radius:4px;font:700 11px/1 "Source Sans 3",sans-serif;padding:2px 5px;white-space:nowrap}
 .em .fb{width:48px;height:54px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--c,#2a3a52)}
-.ban .em{position:absolute;left:14px;bottom:-32px}
-.pi{position:absolute;left:84px;bottom:-24px;width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);background:#1e2d45;overflow:hidden}
+.ban .em{position:absolute;left:6px;bottom:-40px}
+.pi{position:absolute;left:92px;bottom:-22px;width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);background:#1e2d45;overflow:hidden}
 .pi img{width:100%;height:100%;display:block}
-.in{padding:38px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.in{padding:46px 18px 18px;display:flex;flex-direction:column;gap:14px}
 .acc h3{margin:0;font-size:21px;line-height:1.2;overflow-wrap:anywhere}.acc h3 span{color:var(--mut);font-weight:400}
 .meta{margin:2px 0 0;color:var(--mut);font-size:14px}
 .cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
@@ -142,7 +143,9 @@ const games=r=>r?(+r.w||0)+(+r.l||0):0;
 let D={accounts:[]},ver='',mlimit=25;
 const cicon=(m,cls='ci')=>`<span class="${cls}" style="--h:${hue(m.n)}" aria-hidden="true">${esc(ini(m.n))}${safe(m.c)&&ver?`<img src="${DD}${ver}/img/champion/${safe(m.c)}.png" alt="" loading="lazy" onerror="this.remove()">`:''}</span>`;
 const CREST='https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/';
-const emb=r=>{const t=r&&TIERS.includes(r.tier)?r.tier.toLowerCase():'unranked';return `<div class="em" style="--c:${r?TCOL[r.tier]||'#556':'#2a3a52'}" title="${esc(rankTxt(r))}"><img src="${CREST}${t}.svg" alt="${esc(rankTxt(r))}" onerror="this.outerHTML='<span class=fb></span>'">${r&&!isMP(r.tier)&&r.div?`<b>${esc(r.div)}</b>`:''}</div>`};
+const EMB='https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblem/emblem-';
+const crest=r=>r&&TIERS.includes(r.tier)?`<i class="ri" role="img" aria-label="${esc(rankTxt(r))}" style="background-image:url('${EMB}${r.tier.toLowerCase()}.png')"></i>`:`<img src="${CREST}unranked.svg" alt="Unranked" style="width:64%;height:64%" onerror="this.outerHTML='<span class=fb></span>'">`;
+const emb=r=>`<div class="em" style="--c:${r?TCOL[r.tier]||'#556':'#2a3a52'}" title="${esc(rankTxt(r))}">${crest(r)}${r&&!isMP(r.tier)&&r.div?`<b>${esc(r.div)}</b>`:''}</div>`;
 const rk=r=>r?`<b>${esc(rankTxt(r))}</b> · ${fmt(r.lp)} LP`:'<b>Unranked</b>';
 
 function links(a){
@@ -160,7 +163,7 @@ function renderStats(list){
     ['Best rank (current)',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP · '+(top.r===top.a.solo?'Solo/Duo':'Flex'):'',top&&top.r.tier],
     ['Overall win rate',w+l?Math.round(w/(w+l)*100)+'%':'–',w+l?fmt(w+l)+' ranked games':''],
     ['Mastery points',fmt(tot),all[0]?'Top mastery: '+all[0].n:'']];
-  $('#stats').innerHTML=st.map(([l,v,s,tier])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<img src="${CREST}${tier.toLowerCase()}.svg" alt="" onerror="this.remove()">`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
+  $('#stats').innerHTML=st.map(([l,v,s,tier])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<i class="ri" style="background-image:url('${EMB}${tier.toLowerCase()}.png')"></i>`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
 }
 function card(a){
   const [n,t]=split(a.riotId),cur=a.solo||a.flex;
