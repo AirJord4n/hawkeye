@@ -44,9 +44,9 @@ h2{font-size:20px;font-weight:600;margin:40px 0 14px;letter-spacing:-.01em}
 .mp{display:flex;align-items:center;gap:8px}
 .ci{width:26px;height:26px;border-radius:8px;overflow:hidden;background:#3b3054;flex:none;display:inline-grid;place-items:center;font-size:10px;font-weight:600;color:var(--acc2);position:relative}
 .ci img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.dots{display:flex;gap:5px}
-.dots i{width:10px;height:10px;border-radius:50%;display:block}
-.w{background:var(--win)}.l{background:var(--loss)}
+.dots{display:block;flex:none;overflow:visible}
+.dots circle{cursor:default}
+.w{fill:var(--win)}.l{fill:var(--loss)}
 .btns{display:flex;gap:8px;flex-wrap:wrap}
 .go{flex:1;text-align:center;background:var(--acc);color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:10px 14px;border-radius:10px;min-height:42px;display:flex;align-items:center;justify-content:center}
 .go:hover{background:#8a49f0}
@@ -153,7 +153,7 @@ function card(a){
     <div class="mid"><div><div class="lab">${so?'Solo/Duo':fl?'Flex':'Ranked'}</div><div class="rank">${esc(rankTxt(main))}</div><div class="sub">${sub}</div></div>
       ${g?`<div class="ring" style="background:conic-gradient(var(--acc) 0 ${wr}%,var(--line) 0)" title="${fmt(main.w)} wins / ${fmt(main.l)} losses"><div>${wr}%<small>${fmt(g)} games</small></div></div>`:''}</div>
     <div class="ft">${fav?`<span class="mp">${cicon(fav)}<span>${st?`Most played: ${esc(st.n)} · ${fmt(st.games)}${a.seasonDone===false?' …':''}`:`Top mastery: ${esc(mt.n)}`}</span></span>`:'<span></span>'}
-      ${rec.length?`<span class="dots" aria-label="Last ${rec.length} matches">${rec.map(m=>`<i class="${m.win?'w':'l'}" title="${esc(m.n)} · ${m.win?'Win':'Loss'} · ${+m.k||0}/${+m.d||0}/${+m.a||0}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}"></i>`).join('')}</span>`:'<span>No recent matches</span>'}</div>
+      ${rec.length?`<svg class="dots" width="${rec.length*16-4}" height="12" viewBox="0 0 ${rec.length*16-4} 12" role="img" aria-label="Last ${rec.length} matches">${rec.map((m,i)=>`<circle class="${m.win?'w':'l'}" cx="${i*16+6}" cy="6" r="5"><title>${esc(m.n)} · ${m.win?'Win':'Loss'} · ${+m.k||0}/${+m.d||0}/${+m.a||0}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}</title></circle>`).join('')}</svg>`:'<span>No recent matches</span>'}</div>
     <div class="btns"><a class="go" href="https://dpm.lol/${esc(slug)}" target="_blank" rel="noopener">View stats (dpm.lol)</a>
       <details class="more"><summary aria-label="More links">More</summary><div class="menu">${links.map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join('')}<button type="button" data-copy="${esc(a.riotId)}">Copy Riot ID</button></div></details></div>
   </article>`;
