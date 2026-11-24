@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hawkeyes LoL-Accounts</title>
+<meta name="description" content="Ränge, letzte Matches und Champion-Mastery aller LoL-Accounts von Hawkeye.">
+<meta property="og:title" content="Hawkeyes LoL-Accounts">
+<meta property="og:description" content="Ränge, letzte Matches und Champion-Mastery – automatisch aktualisiert.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a1428">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+:root{color-scheme:light dark;--bg:light-dark(#f6f8fa,#07101f);--card:light-dark(#fff,#0d1a2e);--ink:light-dark(#0b1628,#ece4d0);--mut:light-dark(#566275,#93a0b2);--line:light-dark(#dbe2ea,#1f3048);--tea:light-dark(#00857c,#0ac8b9);--gold:#c8aa6e;--band:#0a1428;--bandink:#f0e6d2}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Source Sans 3",system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+h1,h2,.big{font-family:Cinzel,Georgia,serif;font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(32px,5vw,48px)}h2{font-size:clamp(24px,3vw,32px);margin-bottom:18px}
+.head{background:var(--band);color:var(--bandink);border-bottom:1px solid var(--gold);padding-bottom:28px}
+.head p{color:#a9b4c4;margin:8px 0 0}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#1e2d45;margin-top:28px;border:1px solid #1e2d45}
+.stat{background:var(--band);padding:16px 18px}
+.stat small{display:block;color:#8f9bb0;font-size:14px}
+.big{font-size:clamp(22px,3vw,32px);color:#f0e6d2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stat .sub{font-size:14px;color:#0ac8b9}
+:focus-visible{outline:3px solid var(--tea);outline-offset:2px}
+input,select,button{font:16px "Source Sans 3",sans-serif;min-height:44px;padding:8px 10px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);width:100%}
+button{width:auto;font-weight:600;cursor:pointer;padding:0 18px}button:hover{border-color:var(--tea)}
+label{font-size:14px;font-weight:600;display:block}label input,label select{margin-top:4px;font-weight:400}
+.note{font-size:14px;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,350px),1fr));gap:18px}
+.acc{background:var(--card);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column;overflow:hidden}
+.ban{height:130px;position:relative;background:linear-gradient(130deg,hsl(var(--h) 50% 32%),hsl(calc(var(--h) + 35) 55% 14%)) center 22%/cover;border-bottom:2px solid var(--t,var(--gold))}
+.ban::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0a142833,#0a1428cc)}
+.ban>*{z-index:1}
+.ban .tc{position:absolute;right:12px;top:10px;color:#fff;font-size:13px;background:#0008;padding:2px 8px;border-radius:4px}
+.em{width:58px;height:66px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--c,#556);display:grid;place-items:center;font:700 15px Cinzel,serif;color:#fff;text-shadow:0 1px 2px #0008}
+.em.none{background:#2a3a52;color:#9aa7b8;text-shadow:none}
+.ban .em{position:absolute;left:18px;bottom:-30px}
+.pi{position:absolute;left:84px;bottom:-24px;width:44px;height:44px;border-radius:50%;border:2px solid var(--gold);background:#1e2d45;overflow:hidden}
+.pi img{width:100%;height:100%;display:block}
+.in{padding:38px 18px 18px;display:flex;flex-direction:column;gap:14px}
+.acc h3{margin:0;font-size:21px;line-height:1.2;overflow-wrap:anywhere}.acc h3 span{color:var(--mut);font-weight:400}
+.meta{margin:2px 0 0;color:var(--mut);font-size:14px}
+.cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.cmp>div{background:var(--bg);border-radius:8px;padding:8px 10px}
+.cmp small,.lab{color:var(--mut);font-size:13px;display:block}
+.perf{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));text-align:center;gap:4px}
+.perf b{display:block;font-size:19px;font-variant-numeric:tabular-nums}.perf small{color:var(--mut);font-size:13px}
+.wr{height:6px;background:light-dark(#f2d5d0,#3a2026);border-radius:3px;margin-top:5px;overflow:hidden}.wr i{display:block;height:100%;background:var(--tea)}
+.rec{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.mt{width:46px;text-align:center;font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums}
+.mt .ci{width:46px;height:46px;border-radius:6px;border-bottom:4px solid var(--res)}
+.mt.w{--res:#1fb978}.mt.l{--res:#e2453a}
+.ci{position:relative;display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;overflow:hidden;flex:none;color:#fff;font-weight:700;font-size:11px;background:hsl(var(--h) 45% 36%)}
+.ci img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 3px;font-size:14px;white-space:nowrap}
+.go{display:flex;justify-content:center;align-items:center;text-decoration:none;border:1px solid var(--tea);color:var(--tea);border-radius:6px;min-height:44px;font-weight:700}
+.go:hover{background:var(--tea);color:light-dark(#fff,#04121c)}
+.links{display:flex;gap:6px 14px;flex-wrap:wrap;font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+.links a,.links button{color:var(--tea);font-weight:600;text-decoration:none;min-height:28px;display:inline-flex;align-items:center;border:0;background:none;padding:0;font-size:14px}
+.links button{margin-left:auto;color:var(--mut)}
+.filters{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) minmax(0,1.3fr);gap:10px;margin-bottom:14px}
+.mstats{display:flex;gap:6px 24px;flex-wrap:wrap;margin-bottom:14px;color:var(--mut);font-size:15px}.mstats b{color:var(--ink);font-size:18px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+th{text-align:left;font-size:13px;color:var(--mut);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cn{display:flex;align-items:center;gap:10px}.cn .ci{width:36px;height:36px;border-radius:6px}.cn small{display:block;color:var(--mut);font-size:13px}
+.lv{display:inline-grid;place-items:center;min-width:32px;height:36px;padding:0 4px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);font:700 14px Cinzel,serif;color:#fff;background:#59657a}
+.lv.m5{background:#1a8c84}.lv.m10{background:#a8873e}
+.pb{display:flex;align-items:center;gap:10px;justify-content:flex-end}.pb .t{width:min(160px,22vw);height:6px;background:var(--line);border-radius:3px;overflow:hidden}.pb .t i{display:block;height:100%;background:var(--gold)}
+.more{display:flex;justify-content:center;margin-top:14px}
+.empty{padding:28px;text-align:center;color:var(--mut);background:var(--card);border:1px dashed var(--line);border-radius:10px}
+footer{border-top:1px solid var(--line);color:var(--mut);font-size:13px}footer p{max-width:80ch;margin:0 0 6px}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 12px;padding-inline-start:calc(8em + 12px);text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;color:var(--mut);font-size:13px}.stack td:empty{display:none}.pb{justify-content:flex-start}}
+@media(prefers-reduced-motion:no-preference){.acc{animation:up .35s ease both}@keyframes up{from{opacity:0;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<header class="band head"><div class="wrap">
+  <h1 id="title">Hawkeyes LoL-Accounts</h1>
+  <p id="upd">Lade Daten …</p>
+  <div class="stats" id="stats"></div>
+</div></header>
+
+<main class="band"><div class="wrap">
+  <h2>Accounts</h2>
+  <div class="grid" id="accs"><div class="empty">Lade Accounts …</div></div>
+
+  <h2 style="margin-top:48px">Champion-Mastery</h2>
+  <div class="filters">
+    <label>Champion suchen<input id="mq" type="search" placeholder="z. B. Ahri"></label>
+    <label>Account<select id="msel"><option value="all">Alle Accounts zusammen</option></select></label>
+    <label>Sortierung<select id="msort">
+      <option value="pts">Mastery-Punkte</option><option value="lv">Mastery-Level</option>
+      <option value="last">Zuletzt gespielt</option><option value="n">Name</option></select></label>
+  </div>
+  <div class="mstats" id="mstats"></div>
+  <div id="mtab"></div>
+  <div class="more"><button id="bMore" hidden>Alle anzeigen</button></div>
+</div></main>
+
+<footer class="band"><div class="wrap">
+  <p>Daten über die offizielle Riot Games API, automatisch aktualisiert.</p>
+  <p>This site isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+</div></footer>
+
+<script>
+{
+const TIERS=['IRON','BRONZE','SILVER','GOLD','PLATINUM','EMERALD','DIAMOND','MASTER','GRANDMASTER','CHALLENGER'];
+const TDE={IRON:'Eisen',BRONZE:'Bronze',SILVER:'Silber',GOLD:'Gold',PLATINUM:'Platin',EMERALD:'Smaragd',DIAMOND:'Diamant',MASTER:'Meister',GRANDMASTER:'Großmeister',CHALLENGER:'Herausforderer'};
+const TCOL={IRON:'#6b5d55',BRONZE:'#9c5f3a',SILVER:'#7f8d99',GOLD:'#b8892f',PLATINUM:'#2f9a93',EMERALD:'#1f9e62',DIAMOND:'#4f7fe0',MASTER:'#9a55cc',GRANDMASTER:'#c9413a',CHALLENGER:'#d9a92e'};
+const DIVS=['IV','III','II','I'];
+const REG={euw:'euw1',eune:'eun1',na:'na1',kr:'kr',br:'br1',lan:'la1',las:'la2',oce:'oc1',tr:'tr1',ru:'ru',jp:'jp1',me:'me1',sg:'sg2',tw:'tw2',vn:'vn2'};
+const QN={420:'Solo/Duo',440:'Flex',450:'ARAM',400:'Normal (Draft)',430:'Normal (Blind)',490:'Quickplay',1700:'Arena',1900:'URF',900:'ARURF'};
+const DD='https://ddragon.leagueoflegends.com/cdn/';
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=n=>Number(n||0).toLocaleString('de-DE');
+const hue=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))%360;return h};
+const ini=s=>String(s).replace(/[^A-Za-zÀ-ÿ ]/g,'').split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?';
+const safe=c=>/^[A-Za-z0-9]+$/.test(c||'')?c:'';
+const day=864e5;
+const ago=t=>{if(!t)return '–';const m=Math.floor((Date.now()-t)/6e4);if(m<60)return `vor ${Math.max(m,1)} Min.`;const h=Math.floor(m/60);if(h<24)return `vor ${h} Std.`;const d=Math.floor(h/24);return d<2?'gestern':d<60?`vor ${d} Tagen`:d<730?`vor ${Math.round(d/30)} Monaten`:`vor ${Math.round(d/365)} Jahren`};
+const isMP=t=>['MASTER','GRANDMASTER','CHALLENGER'].includes(t);
+const rankTxt=r=>r?`${TDE[r.tier]||r.tier}${isMP(r.tier)?'':' '+(r.div||'')}`:'Ungewertet';
+const rankScore=r=>r&&TIERS.includes(r.tier)?TIERS.indexOf(r.tier)*1000+(isMP(r.tier)?0:Math.max(DIVS.indexOf(r.div),0)*100)+(+r.lp||0):-1;
+const best=a=>[a.solo,a.flex].filter(Boolean).sort((x,y)=>rankScore(y)-rankScore(x))[0]||null;
+const split=id=>{const i=String(id).lastIndexOf('#');return i<0?[id,'']:[id.slice(0,i),id.slice(i+1)]};
+const lvCls=l=>l>=10?'lv m10':l>=5?'lv m5':'lv';
+const games=r=>r?(+r.w||0)+(+r.l||0):0;
+let D={accounts:[]},ver='',mlimit=25;
+const cicon=(m,cls='ci')=>`<span class="${cls}" style="--h:${hue(m.n)}" aria-hidden="true">${esc(ini(m.n))}${safe(m.c)&&ver?`<img src="${DD}${ver}/img/champion/${safe(m.c)}.png" alt="" loading="lazy" onerror="this.remove()">`:''}</span>`;
+const emb=r=>r?`<div class="em" style="--c:${TCOL[r.tier]||'#556'}">${isMP(r.tier)?(r.tier==='MASTER'?'M':r.tier==='GRANDMASTER'?'GM':'C'):esc(r.div||'')}</div>`:`<div class="em none">–</div>`;
+const rk=r=>r?`<b>${esc(rankTxt(r))}</b> · ${fmt(r.lp)} LP`:'<b>Ungewertet</b>';
+
+function links(a){
+  const [n,t]=split(a.riotId),r=a.region||'euw',p=REG[r]||'euw1',slug=encodeURIComponent(n+'-'+t);
+  return [['op.gg',`https://op.gg/lol/summoners/${r}/${slug}`],['u.gg',`https://u.gg/lol/profile/${p}/${encodeURIComponent((n+'-'+t).toLowerCase())}/overview`],
+    ['League of Graphs',`https://www.leagueofgraphs.com/summoner/${r}/${slug}`],['Live-Spiel',`https://porofessor.gg/live/${r}/${slug}`]]
+    .map(([l,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join('');
+}
+function renderStats(list){
+  const all=combine(list,'all').sort((a,b)=>b.pts-a.pts),tot=all.reduce((s,c)=>s+c.pts,0);
+  const top=list.map(a=>({a,r:best(a)})).filter(x=>x.r).sort((x,y)=>rankScore(y.r)-rankScore(x.r))[0];
+  let w=0,l=0;for(const a of list)for(const r of [a.solo,a.flex])if(r){w+=+r.w||0;l+=+r.l||0}
+  const lv=list.reduce((s,a)=>s+(+a.level||0),0);
+  const st=[['Accounts',list.length,lv?'Level gesamt '+fmt(lv):''],
+    ['Bester Rang',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP':''],
+    ['Siegquote gesamt',w+l?Math.round(w/(w+l)*100)+' %':'–',w+l?fmt(w+l)+' Ranked-Spiele':''],
+    ['Mastery-Punkte',fmt(tot),all[0]?'Meistgespielt: '+all[0].n:'']];
+  $('#stats').innerHTML=st.map(([l,v,s])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
+}
+function card(a){
+  const [n,t]=split(a.riotId),cur=a.solo||a.flex,curL=a.solo?'Solo/Duo':a.flex?'Flex':'Solo/Duo';
+  const top=[...(a.mastery||[])].sort((x,y)=>y.pts-x.pts),hero=top[0];
+  const g=games(cur),wr=g?Math.round(cur.w/g*100):0;
+  const peak=a.peak&&rankScore(a.peak)>=rankScore(a.solo)?a.peak:a.solo;
+  const splash=hero&&safe(hero.c)?`background-image:url('${DD}img/champion/splash/${safe(hero.c)}_0.jpg'),linear-gradient(130deg,hsl(${hue(hero.n)} 50% 32%),#0a1428)`:'';
+  const rec=(a.recent||[]).slice(0,5);
+  const icon=Number.isInteger(a.icon)&&ver?`<span class="pi"><img src="${DD}${ver}/img/profileicon/${a.icon}.png" alt="" loading="lazy" onerror="this.remove()"></span>`:'';
+  return `<article class="acc">
+    <div class="ban" style="--h:${hue(hero?hero.n:n)};--t:${cur?TCOL[cur.tier]:'var(--gold)'};${splash}">${hero?`<span class="tc">Top: ${esc(hero.n)}</span>`:''}${emb(cur)}${icon}</div>
+    <div class="in">
+      <div><h3>${esc(n)}<span>#${esc(t)}</span></h3><p class="meta">${a.level?'Level '+fmt(a.level):'Level –'}${a.note?' · '+esc(a.note):''}</p></div>
+      <div class="cmp"><div><small>Aktuell · ${curL}</small>${rk(cur)}</div><div><small>Allzeit-Bestleistung</small>${rk(peak)}</div></div>
+      ${g?`<div><div class="perf"><div><b>${wr} %</b><small>Siegquote</small></div><div><b>${fmt(cur.w)}</b><small>Siege</small></div><div><b>${fmt(cur.l)}</b><small>Niederl.</small></div><div><b>${fmt(g)}</b><small>Spiele</small></div></div><div class="wr"><i style="width:${wr}%"></i></div></div>`:''}
+      ${a.solo&&a.flex?`<p class="meta" style="margin:0">Flex: ${esc(rankTxt(a.flex))} · ${fmt(a.flex.lp)} LP · ${fmt(a.flex.w)} S / ${fmt(a.flex.l)} N</p>`:''}
+      <div><span class="lab">Letzte 5 Matches</span>${rec.length?`<div class="rec">${rec.map(m=>`<div class="mt ${m.win?'w':'l'}" title="${esc(m.n)} · ${m.win?'Sieg':'Niederlage'}${QN[m.q]?' · '+QN[m.q]:''}${m.t?' · '+ago(m.t):''}">${cicon(m)}<div>${+m.k||0}/${+m.d||0}/${+m.a||0}</div></div>`).join('')}</div>`:'<p class="note" style="margin:4px 0 0">Keine aktuellen Matches</p>'}</div>
+      ${top.length?`<div><span class="lab">Top-Mastery</span><div class="chips">${top.slice(0,3).map(m=>`<span class="chip">${cicon(m)}${esc(m.n)} · ${fmt(m.pts)}</span>`).join('')}</div></div>`:''}
+      <a class="go" href="https://dpm.lol/${esc(encodeURIComponent(n+'-'+t))}" target="_blank" rel="noopener">Statistiken &amp; Analysen ansehen</a>
+      <nav class="links">${links(a)}<button type="button" data-copy="${esc(a.riotId)}">Riot-ID kopieren</button></nav></div></article>`;
+}
+function combine(list,sel){
+  const map=new Map();
+  list.forEach((a,i)=>{
+    if(sel!=='all'&&String(i)!==sel)return;
+    for(const m of a.mastery||[]){
+      const k=String(m.n).toLowerCase(),e=map.get(k)||{n:m.n,c:m.c,pts:0,lv:0,last:0,per:[]};
+      e.pts+=+m.pts||0;e.lv=Math.max(e.lv,+m.lv||0);e.last=Math.max(e.last,+m.last||0);
+      e.per.push({acc:split(a.riotId)[0],pts:+m.pts||0});map.set(k,e);
+    }
+  });
+  return [...map.values()];
+}
+function renderMastery(){
+  const list=D.accounts,sel=$('#msel').value,q=$('#mq').value.trim().toLowerCase(),srt=$('#msort').value;
+  let rows=combine(list,sel);
+  const tot=rows.reduce((s,c)=>s+c.pts,0);
+  $('#mstats').innerHTML=rows.length?`<span><b>${fmt(rows.length)}</b> Champions</span><span><b>${fmt(tot)}</b> Punkte</span><span><b>${rows.filter(c=>c.lv>=10).length}</b> mit Level 10+</span><span><b>${rows.filter(c=>c.lv>=5).length}</b> mit Level 5+</span>`:'';
+  if(q)rows=rows.filter(c=>c.n.toLowerCase().includes(q));
+  rows.sort(srt==='n'?(a,b)=>a.n.localeCompare(b.n,'de'):srt==='lv'?(a,b)=>b.lv-a.lv||b.pts-a.pts:srt==='last'?(a,b)=>b.last-a.last:(a,b)=>b.pts-a.pts);
+  if(!rows.length){$('#mtab').innerHTML=`<div class="empty">${q?'Kein Champion gefunden.':'Noch keine Mastery-Daten.'}</div>`;$('#bMore').hidden=true;return}
+  const max=Math.max(...rows.map(r=>r.pts),1),multi=sel==='all'&&list.length>1;
+  $('#mtab').innerHTML=`<table class="stack"><thead><tr><th class="num">#</th><th>Champion</th><th>Level</th><th class="num">Punkte</th><th>Zuletzt gespielt</th></tr></thead><tbody>${
+    rows.slice(0,mlimit).map((c,i)=>`<tr><td class="num" data-l="#">${i+1}</td>
+      <td data-l="Champion"><div class="cn">${cicon(c)}<div>${esc(c.n)}${multi?`<small>${c.per.map(p=>esc(p.acc)+(c.per.length>1?' '+fmt(p.pts):'')).join(' · ')}</small>`:''}</div></div></td>
+      <td data-l="Level"><span class="${lvCls(c.lv)}">${c.lv||'–'}</span></td>
+      <td class="num" data-l="Punkte"><div class="pb"><span class="t"><i style="width:${(c.pts/max*100).toFixed(1)}%"></i></span>${fmt(c.pts)}</div></td>
+      <td data-l="Zuletzt gespielt">${ago(c.last)}</td></tr>`).join('')}</tbody></table>`;
+  $('#bMore').hidden=rows.length<=mlimit;$('#bMore').textContent=`Alle ${rows.length} anzeigen`;
+}
+function render(){
+  const list=[...D.accounts].sort((x,y)=>rankScore(best(y))-rankScore(best(x)));
+  D.accounts=list;ver=/^[\d.]+$/.test(D.ddragon||'')?D.ddragon:'';
+  if(D.title){$('#title').textContent=D.title;document.title=D.title}
+  $('#upd').textContent=D.updated?'Automatisch aktualisiert · Stand '+ago(Date.parse(D.updated)):'';
+  renderStats(list);
+  $('#accs').innerHTML=list.length?list.map(card).join(''):'<div class="empty">Noch keine Accounts.</div>';
+  $('#msel').innerHTML='<option value="all">Alle Accounts zusammen</option>'+list.map((a,i)=>`<option value="${i}">${esc(a.riotId)}</option>`).join('');
+  renderMastery();
+}
+$('#mq').oninput=$('#msel').onchange=$('#msort').onchange=()=>{mlimit=25;renderMastery()};
+$('#bMore').onclick=()=>{mlimit=1e4;renderMastery()};
+$('#accs').addEventListener('click',async e=>{const b=e.target.closest('[data-copy]');if(!b)return;
+  try{await navigator.clipboard.writeText(b.dataset.copy);b.textContent='Kopiert ✓'}catch(_){b.textContent=b.dataset.copy}setTimeout(()=>b.textContent='Riot-ID kopieren',1800)});
+fetch('data.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{D=d&&Array.isArray(d.accounts)?d:{accounts:[]};render()})
+  .catch(()=>{$('#upd').textContent='Daten konnten nicht geladen werden.';$('#accs').innerHTML='<div class="empty">Noch keine Daten – das erste automatische Update läuft gleich.</div>'});
+}
+</script>
+</body>
+</html>
