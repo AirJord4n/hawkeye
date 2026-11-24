@@ -82,7 +82,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:now
 .more{display:flex;justify-content:center;margin-top:14px}
 .empty{padding:28px;text-align:center;color:var(--mut);background:var(--card);border:1px dashed var(--line);border-radius:10px}
 footer{border-top:1px solid var(--line);color:var(--mut);font-size:13px}footer p{max-width:80ch;margin:0 0 6px}
-@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat.rank{order:-1;grid-column:1/-1}.filters{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 12px;padding-inline-start:calc(8em + 12px);text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;color:var(--mut);font-size:13px}.stack td:empty{display:none}.pb{justify-content:flex-start}}
 @media(prefers-reduced-motion:no-preference){.acc{animation:up .35s ease both}@keyframes up{from{opacity:0;transform:translateY(6px)}}}
 </style>
@@ -163,7 +163,7 @@ function renderStats(list){
     ['Best rank (current)',top?rankTxt(top.r):'–',top?split(top.a.riotId)[0]+' · '+fmt(top.r.lp)+' LP · '+(top.r===top.a.solo?'Solo/Duo':'Flex'):'',top&&top.r.tier],
     ['Overall win rate',w+l?Math.round(w/(w+l)*100)+'%':'–',w+l?fmt(w+l)+' ranked games':''],
     ['Mastery points',fmt(tot),all[0]?'Top mastery: '+all[0].n:'']];
-  $('#stats').innerHTML=st.map(([l,v,s,tier])=>`<div class="stat"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<i class="ri" style="background-image:url('${EMB}${tier.toLowerCase()}.png')"></i>`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
+  $('#stats').innerHTML=st.map(([l,v,s,tier],i)=>`<div class="stat${i===1?' rank':''}"><small>${esc(l)}</small><div class="big" title="${esc(v)}">${tier&&TIERS.includes(tier)?`<i class="ri" style="background-image:url('${EMB}${tier.toLowerCase()}.png')"></i>`:''}${esc(v)}</div><div class="sub">${esc(s)}</div></div>`).join('');
 }
 function card(a){
   const [n,t]=split(a.riotId),cur=a.solo||a.flex;
