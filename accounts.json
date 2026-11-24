@@ -3,6 +3,27 @@
   "owner": "Hawkeye",
   "region": "euw",
   "accounts": [
-    { "riotId": "Hαωkεyε#985", "note": "Main" }
+    {
+      "riotId": "Hαωkεyε#985",
+      "note": "Main"
+    },
+    {
+      "riotId": "Hawkεyε#985"
+    },
+    {
+      "riotId": "AirJørdan 1#Air"
+    },
+    {
+      "riotId": "AirFørce 1#EUW"
+    },
+    {
+      "riotId": "HawkEye9851#EUW"
+    },
+    {
+      "riotId": "Air Max 90#985"
+    },
+    {
+      "riotId": "DasBaba1#EUW"
+    }
   ]
 }
